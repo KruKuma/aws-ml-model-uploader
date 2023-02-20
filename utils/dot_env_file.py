@@ -12,8 +12,7 @@ class DotEnvFile:
         aws_configurations_arguments = self._load_arguments({"access_id": "AWS_ACCESS_KEY_ID",
                                                              "secret_key": "AWS_SECRET_ACCESS_KEY",
                                                              "region": "AWS_REGION",
-                                                             "bucket_name": "AWS_BUCKET_NAME",
-                                                             "instance_id": "AWS_ML_INSTANCE_ID"})
+                                                             "bucket_name": "AWS_BUCKET_NAME"})
         return aws_configurations_arguments
 
     @staticmethod
