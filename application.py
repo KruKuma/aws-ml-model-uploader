@@ -5,7 +5,6 @@ import pandas as pd
 import lightgbm as lgb
 import pickle
 
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 import utils
@@ -40,20 +39,18 @@ class Application:
         return X, y
 
     @staticmethod
-    def split_and_scale_data(X, y):
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(X_train)
-        return X_train, X_test, y_train, y_test, scaler
-
-    @staticmethod
     def train_lgbm(X_train, y_train):
+        scaler = StandardScaler()
+
+        # Train LightGBM model
         lgb_model = lgb.LGBMRegressor(objective='binary',
                                       num_leaves=31,
                                       learning_rate=0.05,
                                       n_estimators=20)
+
+        X_train = scaler.fit_transform(X_train)
         lgb_model.fit(X_train, y_train)
-        return lgb_model
+        return lgb_model, scaler
 
     @staticmethod
     def save_model_and_scaler(model, scaler, model_path, scaler_path):
@@ -66,20 +63,20 @@ class Application:
 
 
 def main():
-    # Load heart disease dataset
-    X, y = Application().load_heart_disease_dataset(
+    # Initialize application
+    app = Application()
+
+    X, y = app.load_heart_disease_dataset(
         'https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data')
 
-    # Split and scale the data
-    X_train, X_test, y_train, y_test, scaler = Application().split_and_scale_data(X, y)
+    # Train LightGBM model on Amazon Sagemaker
+    lgb_model, scaler = app.train_lgbm(X, y)
 
-    # Train LightGBM model
-    lgb_model = Application().train_lgbm(X_train, y_train)
+    # Save the model and scaler to local storage
+    app.save_model_and_scaler(lgb_model, scaler, 'model.txt', 'scaler.pkl')
 
-    # Save the model and scaler to files
-    Application().save_model_and_scaler(lgb_model, scaler, 'model.txt', 'scaler.pkl')
-
-    Application().upload_files()
+    # Upload the model and scaler to S3
+    app.upload_files()
 
 
 if __name__ == '__main__':
