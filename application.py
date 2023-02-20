@@ -16,7 +16,9 @@ class Application:
         dot_env_file_path = os.path.join(project_directory, ".env")
         dot_env_file = utils.DotEnvFile(dot_env_file_path)
         aws_arguments = dot_env_file.load_aws_configurations()
-        self._boto3_configuration = utils.Boto3Configuration(aws_arguments["region"],
+        self._boto3_configuration = utils.Boto3Configuration(aws_arguments["access_id"],
+                                                             aws_arguments["secret_key"],
+                                                             aws_arguments["region"],
                                                              aws_arguments["bucket_name"])
 
     @staticmethod
