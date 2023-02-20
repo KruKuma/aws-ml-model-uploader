@@ -9,8 +9,11 @@ class DotEnvFile:
         self._dot_env_file_content = dotenv.dotenv_values(dot_env_file_path)
 
     def load_aws_configurations(self):
-        aws_configurations_arguments = self._load_arguments({"region": "AWS_REGION",
-                                                             "bucket_name": "AWS_BUCKET_NAME"})
+        aws_configurations_arguments = self._load_arguments({"access_id": "AWS_ACCESS_KEY_ID",
+                                                             "secret_key": "AWS_SECRET_ACCESS_KEY",
+                                                             "region": "AWS_REGION",
+                                                             "bucket_name": "AWS_BUCKET_NAME",
+                                                             "instance_id": "AWS_ML_INSTANCE_ID"})
         return aws_configurations_arguments
 
     @staticmethod

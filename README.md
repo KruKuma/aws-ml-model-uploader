@@ -15,6 +15,8 @@ insert the sensitive data in a template `.env` file.
 To setup your local environment, create at the project root a `.env` file with:
 ```dotenv
 # AWS connection
+AWS_ACCESS_KEY_ID==
+AWS_SECRET_ACCESS_KEY=
 AWS_REGION=
 AWS_BUCKET_NAME=
 ```
